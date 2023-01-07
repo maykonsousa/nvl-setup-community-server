@@ -17,8 +17,10 @@ model Users {
   password          String
   type              String?  @default("USER")
   githubProfile     String?  @unique
-  linkedinProfile   String?  @unique
-  rocketseatProfile String?  @unique
+  linkedinProfile   String?
+  rocketseatProfile String?
+  avatarUrl         String?
+  bio               String?
   countIndication   Int?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())

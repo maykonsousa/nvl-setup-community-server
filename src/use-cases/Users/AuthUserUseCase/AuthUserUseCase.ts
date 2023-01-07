@@ -14,6 +14,8 @@ interface ILoginResposeData {
     githubProfile?: string;
     linkedinProfile?: string;
     rocketseatProfile?: string;
+    avatarUrl?: string;
+    bio?: string;
     updatedAt: Date;
   };
 }
@@ -75,6 +77,8 @@ export class AuthUserUseCase {
         githubProfile: user.githubProfile,
         linkedinProfile: user.linkedinProfile,
         rocketseatProfile: user.rocketseatProfile,
+        avatarUrl: user.avatarUrl,
+        bio: user.bio,
         updatedAt: user.updatedAt,
       },
     };

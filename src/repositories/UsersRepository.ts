@@ -6,6 +6,8 @@ export interface ICreateUserData {
   githubProfile?: string;
   linkedinProfile?: string;
   rocketseatProfile?: string;
+  avatarUrl?: string;
+  bio?: string;
 }
 
 export interface IUpdateUserData {
@@ -28,9 +30,10 @@ export interface IDataUserModel {
   password: string;
   countIndication: number;
   githubProfile?: string;
-
   linkedinProfile?: string;
   rocketseatProfile?: string;
+  avatarUrl?: string;
+  bio?: string;
   createdAt: Date;
   updatedAt: Date;
 }
