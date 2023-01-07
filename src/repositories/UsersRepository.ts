@@ -43,4 +43,5 @@ export interface IUsersRepository {
   update({ id, data }: IUpdateUserData): Promise<IDataUserModel>;
   delete(id: string): Promise<void>;
   deleteAll(): Promise<void>;
+  updateAll(users: IDataUserModel[]): Promise<void>;
 }

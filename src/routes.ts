@@ -7,6 +7,7 @@ import { DeleteUserController } from "./use-cases/Users/DeleteUserUseCase/Delete
 import { GetAllUsersController } from "./use-cases/Users/GetAllUsersUseCase/GetAllUsersController";
 import { GetUserByIdController } from "./use-cases/Users/GetUserByIdUseCase/GetUserByIdController";
 import { GetUserByUsernameController } from "./use-cases/Users/GetUserByUsernameUseCase/GetUserByUsernameController";
+import { UpdateAllCountController } from "./use-cases/Users/UpdateAllCountUserCase/UpdateAllCountController";
 import { UpdateUserController } from "./use-cases/Users/UpdateUserUseCase/UpdateUserController";
 
 export const routes = express.Router();
@@ -19,6 +20,7 @@ const updateUserController = new UpdateUserController();
 const deleteUserController = new DeleteUserController();
 const deleteAllUsersController = new DeleteUserController();
 const getUserByUsernameController = new GetUserByUsernameController();
+const updateAllCountController = new UpdateAllCountController();
 
 const ensuredAuthenticatedMiddleware = new EnsuredAuthenticatedMiddleware();
 
@@ -39,3 +41,4 @@ routes.delete("/user", deleteUserController.handle);
 //rotas administrativas
 routes.use(ensuredAdminMiddleware.handle);
 routes.delete("/users/all", deleteAllUsersController.handle);
+routes.put("/users/all", updateAllCountController.handle);
