@@ -69,4 +69,19 @@ export class PrismaUsersRepository implements IUsersRepository {
   async deleteAll(): Promise<void> {
     await this.prisma.users.deleteMany({});
   }
+
+  async updateAll(users: IDataUserModel[]): Promise<void> {
+    const newUsers = users.map(async (user) => {
+      await this.prisma.users.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          countIndication: user.countIndication,
+        },
+      });
+    });
+
+    await Promise.all(newUsers);
+  }
 }
