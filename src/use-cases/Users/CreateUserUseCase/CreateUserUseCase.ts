@@ -6,6 +6,7 @@ import {
   IUsersRepository,
 } from "../../../repositories/UsersRepository";
 import { hash } from "bcrypt";
+import { GetGithubData } from "../../../helpers/GetGithubData";
 
 @injectable()
 export class CreateUserUseCase {
@@ -41,6 +42,7 @@ export class CreateUserUseCase {
 
     const passwordHash = await hash(password, 8);
     const updatedCountIndication = userIsValid.totalCount;
+    const { avatarUrl, bio } = await GetGithubData(githubProfile as string);
     const user = await this.usersRepository.create({
       username,
       fullName,
@@ -49,6 +51,8 @@ export class CreateUserUseCase {
       githubProfile,
       linkedinProfile,
       rocketseatProfile,
+      avatarUrl,
+      bio,
     });
     return user;
   }
