@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../../repositories/UsersRepository";
 import { sign } from "jsonwebtoken";
 import { compare } from "bcrypt";
+import formatDate from "../../../helpers/FormatDate";
 
 interface ILoginResposeData {
   token: string;
@@ -16,7 +17,7 @@ interface ILoginResposeData {
     rocketseatProfile?: string;
     avatarUrl?: string;
     bio?: string;
-    updatedAt: Date;
+    updatedAt: string;
   };
 }
 
@@ -79,7 +80,7 @@ export class AuthUserUseCase {
         rocketseatProfile: user.rocketseatProfile,
         avatarUrl: user.avatarUrl,
         bio: user.bio,
-        updatedAt: user.updatedAt,
+        updatedAt: formatDate(user.updatedAt as Date),
       },
     };
   }

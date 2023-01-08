@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import formatDate from "../../../helpers/FormatDate";
 import {
   IDataUserModel,
   IUsersRepository,
@@ -21,6 +22,8 @@ export class GetUserByIdUseCase {
     if (!user) {
       throw new Error("User not found");
     }
+
+    user.updatedAt = formatDate(user.updatedAt as Date);
 
     return user;
   }

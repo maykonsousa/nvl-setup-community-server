@@ -6,6 +6,7 @@ import {
 } from "../../../repositories/UsersRepository";
 
 import { GetGithubData } from "../../../helpers/GetGithubData";
+import formatDate from "../../../helpers/FormatDate";
 
 interface IUpdateUserRequest {
   id: string;
@@ -70,6 +71,8 @@ export class UpdateUserUseCase {
       id,
       data: newUser,
     });
+
+    updatedUser.updatedAt = formatDate(updatedUser.updatedAt as Date);
 
     return updatedUser;
   }
