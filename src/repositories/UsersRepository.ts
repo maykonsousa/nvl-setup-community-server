@@ -16,7 +16,7 @@ export interface IUpdateUserData {
     fullName?: string;
     githubProfile?: string;
     linkedinProfile?: string;
-    rocketseatProfile: string;
+    rocketseatProfile?: string;
     countIndication?: number;
     password?: string;
   };
