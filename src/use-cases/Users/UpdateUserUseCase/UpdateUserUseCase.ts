@@ -73,8 +73,8 @@ export class UpdateUserUseCase {
           : userAlreadyExists.rocketseatProfile,
         countIndication: totalCount,
         password: password ? password : userAlreadyExists.password,
-        avatarUrl: avatarUrl ? avatarUrl : userAlreadyExists.avatarUrl,
-        bio: bio ? bio : userAlreadyExists.bio,
+        avatarUrl,
+        bio,
       },
     });
 
