@@ -19,6 +19,8 @@ export interface IUpdateUserData {
     rocketseatProfile?: string;
     countIndication?: number;
     password?: string;
+    avatarUrl?: string;
+    bio?: string;
   };
 }
 

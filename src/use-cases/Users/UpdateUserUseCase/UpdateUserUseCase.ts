@@ -14,6 +14,8 @@ interface IUpdateUserRequest {
     rocketseatProfile?: string;
     countIndication?: number;
     password?: string;
+    avatarUrl?: string;
+    bio?: string;
   };
 }
 
@@ -31,6 +33,8 @@ export class UpdateUserUseCase {
       linkedinProfile,
       rocketseatProfile,
       password,
+      avatarUrl,
+      bio,
     } = data;
 
     if (!id) throw new Error("Usuário não informado");
@@ -39,6 +43,15 @@ export class UpdateUserUseCase {
     if (!userAlreadyExists) throw new Error("Usuário não existe");
 
     const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${userAlreadyExists.username}`;
+
+    if (githubProfile) {
+      const { avatarUrl, bio } = await axios
+        .get(githubProfile)
+        .then((response) => response.data)
+        .catch(() => null);
+      if (avatarUrl) data.avatarUrl = avatarUrl;
+      if (bio) data.bio = bio;
+    }
 
     const { totalCount } = await axios
       .get(url)
@@ -60,6 +73,8 @@ export class UpdateUserUseCase {
           : userAlreadyExists.rocketseatProfile,
         countIndication: totalCount,
         password: password ? password : userAlreadyExists.password,
+        avatarUrl: avatarUrl ? avatarUrl : userAlreadyExists.avatarUrl,
+        bio: bio ? bio : userAlreadyExists.bio,
       },
     });
 
