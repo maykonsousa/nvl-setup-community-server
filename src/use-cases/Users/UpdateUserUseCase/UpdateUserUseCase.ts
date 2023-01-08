@@ -11,7 +11,7 @@ interface IUpdateUserRequest {
     fullName?: string;
     githubProfile?: string;
     linkedinProfile?: string;
-    rocketseatProfile: string;
+    rocketseatProfile?: string;
     countIndication?: number;
     password?: string;
   };
@@ -49,11 +49,17 @@ export class UpdateUserUseCase {
       id,
       data: {
         fullName,
-        githubProfile,
-        linkedinProfile,
-        rocketseatProfile,
+        githubProfile: githubProfile
+          ? githubProfile
+          : userAlreadyExists.githubProfile,
+        linkedinProfile: linkedinProfile
+          ? linkedinProfile
+          : userAlreadyExists.linkedinProfile,
+        rocketseatProfile: rocketseatProfile
+          ? rocketseatProfile
+          : userAlreadyExists.rocketseatProfile,
         countIndication: totalCount,
-        password,
+        password: password ? password : userAlreadyExists.password,
       },
     });
 
