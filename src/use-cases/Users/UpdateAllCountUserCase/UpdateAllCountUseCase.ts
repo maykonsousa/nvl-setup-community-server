@@ -1,5 +1,6 @@
 import axios from "axios";
 import { inject, injectable } from "tsyringe";
+import formatDate from "../../../helpers/FormatDate";
 import {
   IDataUserModel,
   IUsersRepository,
@@ -23,6 +24,7 @@ export class UpdateAllCountUseCase {
 
         return {
           ...user,
+          updatedAt: formatDate(new Date()),
           countIndication: totalCount,
         };
       })

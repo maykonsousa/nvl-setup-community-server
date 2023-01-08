@@ -23,7 +23,7 @@ export interface IDataUserModel {
   avatarUrl?: string;
   bio?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | string;
 }
 
 export interface IUpdateUserData {
