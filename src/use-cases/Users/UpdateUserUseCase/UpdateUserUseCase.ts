@@ -5,6 +5,8 @@ import {
   IUsersRepository,
 } from "../../../repositories/UsersRepository";
 
+import { GetGithubData } from "../../../helpers/GetGithubData";
+
 interface IUpdateUserRequest {
   id: string;
   data: {
@@ -14,8 +16,6 @@ interface IUpdateUserRequest {
     rocketseatProfile?: string;
     countIndication?: number;
     password?: string;
-    avatarUrl?: string;
-    bio?: string;
   };
 }
 
@@ -33,8 +33,6 @@ export class UpdateUserUseCase {
       linkedinProfile,
       rocketseatProfile,
       password,
-      avatarUrl,
-      bio,
     } = data;
 
     if (!id) throw new Error("Usuário não informado");
@@ -44,38 +42,33 @@ export class UpdateUserUseCase {
 
     const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${userAlreadyExists.username}`;
 
-    if (githubProfile) {
-      const { avatarUrl, bio } = await axios
-        .get(githubProfile)
-        .then((response) => response.data)
-        .catch(() => null);
-      if (avatarUrl) data.avatarUrl = avatarUrl;
-      if (bio) data.bio = bio;
-    }
-
     const { totalCount } = await axios
       .get(url)
       .then((response) => response.data)
       .catch(() => null);
 
+    const { avatarUrl, bio } = await GetGithubData(
+      githubProfile || (userAlreadyExists.githubProfile as string)
+    );
+
+    console.log(avatarUrl, bio);
+
+    const newUser = {
+      ...userAlreadyExists,
+      fullName: fullName || userAlreadyExists.fullName,
+      githubProfile: githubProfile || userAlreadyExists.githubProfile,
+      linkedinProfile: linkedinProfile || userAlreadyExists.linkedinProfile,
+      rocketseatProfile:
+        rocketseatProfile || userAlreadyExists.rocketseatProfile,
+      countIndication: totalCount || userAlreadyExists.countIndication,
+      password: password || userAlreadyExists.password,
+      avatarUrl,
+      bio,
+    };
+
     const updatedUser = await this.usersRepository.update({
       id,
-      data: {
-        fullName,
-        githubProfile: githubProfile
-          ? githubProfile
-          : userAlreadyExists.githubProfile,
-        linkedinProfile: linkedinProfile
-          ? linkedinProfile
-          : userAlreadyExists.linkedinProfile,
-        rocketseatProfile: rocketseatProfile
-          ? rocketseatProfile
-          : userAlreadyExists.rocketseatProfile,
-        countIndication: totalCount,
-        password: password ? password : userAlreadyExists.password,
-        avatarUrl,
-        bio,
-      },
+      data: newUser,
     });
 
     return updatedUser;

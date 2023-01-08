@@ -10,20 +10,6 @@ export interface ICreateUserData {
   bio?: string;
 }
 
-export interface IUpdateUserData {
-  id: string;
-  data: {
-    fullName?: string;
-    githubProfile?: string;
-    linkedinProfile?: string;
-    rocketseatProfile?: string;
-    countIndication?: number;
-    password?: string;
-    avatarUrl?: string;
-    bio?: string;
-  };
-}
-
 export interface IDataUserModel {
   id: string;
   type: string;
@@ -38,6 +24,11 @@ export interface IDataUserModel {
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IUpdateUserData {
+  id: string;
+  data: IDataUserModel;
 }
 
 export interface IUsersRepository {
