@@ -6,6 +6,11 @@ import {
   IUsersRepository,
 } from "../../../repositories/UsersRepository";
 
+interface IUpdateAllResponse {
+  updateDate: string;
+  users: IDataUserModel[];
+}
+
 @injectable()
 export class UpdateAllCountUseCase {
   constructor(
@@ -13,7 +18,7 @@ export class UpdateAllCountUseCase {
     private usersRepository: IUsersRepository
   ) {}
 
-  async execute(): Promise<IDataUserModel[]> {
+  async execute(): Promise<IUpdateAllResponse> {
     const users = await this.usersRepository.getAll();
     const usersUpdated = await Promise.all(
       users.map(async (user) => {
@@ -22,15 +27,22 @@ export class UpdateAllCountUseCase {
           .get(url)
           .then((response) => response.data);
 
-        return {
+        const newUser = {
           ...user,
-          updatedAt: formatDate(new Date()),
           countIndication: totalCount,
+        };
+
+        return {
+          ...newUser,
+          updatedAt: formatDate(new Date()),
         };
       })
     );
 
     await this.usersRepository.updateAll(usersUpdated);
-    return usersUpdated;
+    return {
+      updateDate: formatDate(new Date()),
+      users: usersUpdated,
+    };
   }
 }

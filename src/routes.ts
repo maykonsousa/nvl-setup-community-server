@@ -37,8 +37,8 @@ routes.use(ensuredAuthenticatedMiddleware.handle);
 routes.get("/user", getUserByIdController.handle);
 routes.put("/user", updateUserController.handle);
 routes.delete("/user", deleteUserController.handle);
+routes.put("/users/all", updateAllCountController.handle);
 
 //rotas administrativas
 routes.use(ensuredAdminMiddleware.handle);
 routes.delete("/users/all", deleteAllUsersController.handle);
-routes.put("/users/all", updateAllCountController.handle);
