@@ -52,8 +52,6 @@ export class UpdateUserUseCase {
       githubProfile || (userAlreadyExists.githubProfile as string)
     );
 
-    console.log(avatarUrl, bio);
-
     const newUser = {
       ...userAlreadyExists,
       fullName: fullName || userAlreadyExists.fullName,
