@@ -32,17 +32,15 @@ export class UpdateAllCountUseCase {
           countIndication: totalCount,
         };
 
-        return {
-          ...newUser,
-          updatedAt: formatDate(new Date()),
-        };
+        return newUser;
       })
     );
 
     await this.usersRepository.updateAll(usersUpdated);
+    const newUsers = await this.usersRepository.getAll();
     return {
       updateDate: formatDate(new Date()),
-      users: usersUpdated,
+      users: newUsers,
     };
   }
 }
