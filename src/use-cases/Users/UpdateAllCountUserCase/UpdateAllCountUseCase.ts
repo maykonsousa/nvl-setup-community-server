@@ -20,8 +20,12 @@ export class UpdateAllCountUseCase {
 
   async execute(): Promise<IUpdateAllResponse> {
     const users = await this.usersRepository.getAll();
-    const usersUpdated = await Promise.all(
-      users.map(async (user) => {
+    //dividir em 2 arrays para não sobrecarregar a api
+    const users1 = users.slice(0, 20);
+    const users2 = users.slice(20, 40);
+    const usersUpdated1 = await Promise.all(
+      users1.map(async (user) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
         const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${user.username}`;
         const { totalCount } = await axios
           .get(url)
@@ -36,11 +40,36 @@ export class UpdateAllCountUseCase {
       })
     );
 
-    await this.usersRepository.updateAll(usersUpdated);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const usersUpdated2 = await Promise.all(
+      users2.map(async (user) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${user.username}`;
+        const { totalCount } = await axios
+          .get(url)
+          .then((response) => response.data);
+
+        const newUser = {
+          ...user,
+          countIndication: totalCount,
+        };
+
+        return newUser;
+      })
+    );
+
+    await this.usersRepository.updateAll([...usersUpdated1, ...usersUpdated2]);
     const newUsers = await this.usersRepository.getAll();
+    const newUsersReturn = newUsers.map((user) => {
+      return {
+        ...user,
+        updatedAt: formatDate(new Date(user.updatedAt)),
+      };
+    });
     return {
       updateDate: formatDate(new Date()),
-      users: newUsers,
+      users: newUsersReturn,
     };
   }
 }
