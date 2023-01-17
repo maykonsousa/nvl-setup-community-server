@@ -24,6 +24,9 @@ export class UpdateAllCountUseCase {
     const users1 = users.slice(0, 20);
     const users2 = users.slice(20, 40);
     const users3 = users.slice(40, 60);
+    const users4 = users.slice(60, 80);
+    const users5 = users.slice(80, 100);
+
     const usersUpdated1 = await Promise.all(
       users1.map(async (user) => {
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -79,10 +82,50 @@ export class UpdateAllCountUseCase {
       })
     );
 
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const usersUpdated4 = await Promise.all(
+      users4.map(async (user) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${user.username}`;
+        const { totalCount } = await axios
+          .get(url)
+          .then((response) => response.data);
+
+        const newUser = {
+          ...user,
+          countIndication: totalCount,
+        };
+
+        return newUser;
+      })
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const usersUpdated5 = await Promise.all(
+      users5.map(async (user) => {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const url = `https://skylab-api.rocketseat.com.br/public/event/nlw-setup/referral/${user.username}`;
+        const { totalCount } = await axios
+          .get(url)
+          .then((response) => response.data);
+
+        const newUser = {
+          ...user,
+          countIndication: totalCount,
+        };
+
+        return newUser;
+      })
+    );
+
     await this.usersRepository.updateAll([
       ...usersUpdated1,
       ...usersUpdated2,
       ...usersUpdated3,
+      ...usersUpdated4,
+      ...usersUpdated5,
     ]);
     const newUsers = await this.usersRepository.getAll();
     const newUsersReturn = newUsers.map((user) => {
